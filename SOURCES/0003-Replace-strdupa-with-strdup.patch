@@ -1,0 +1,82 @@
+From f43f9f4af179ad9a46815779e8cbe0bf97ec32cd Mon Sep 17 00:00:00 2001
+From: Honggang Li <honli@redhat.com>
+Date: Tue, 11 Jun 2019 09:33:28 -0400
+Subject: [PATCH 3/3] Replace 'strdupa' with 'strdup'
+
+Signed-off-by: Honggang Li <honli@redhat.com>
+---
+ opasadb/path_tools/query/opa_osd_query.c | 19 +++++++++++++------
+ 1 file changed, 13 insertions(+), 6 deletions(-)
+
+diff --git a/opasadb/path_tools/query/opa_osd_query.c b/opasadb/path_tools/query/opa_osd_query.c
+index 2804eb245731..11725e7aa61a 100644
+--- a/opasadb/path_tools/query/opa_osd_query.c
++++ b/opasadb/path_tools/query/opa_osd_query.c
+@@ -145,7 +145,7 @@ int main(int argc, char **argv)
+ 
+ 		switch (c) {
+ 		case 'v': debug = strtol(optarg,NULL,0); op_log_set_level(debug); break;
+-		case 'h': hfi_name = (char*)strdupa(optarg); break;
++		case 'h': hfi_name = (char*)strdup(optarg); break;
+ 		case 'p': port = strtol(optarg,NULL,0); break;
+ 		case 's': query.slid = htons(strtol(optarg,NULL,0)); break;
+ 		case 'd': query.dlid = htons(strtol(optarg,NULL,0)); break;
+@@ -154,13 +154,13 @@ int main(int argc, char **argv)
+ 		case 'S': 
+ 			if (!parse_gid(optarg, &query.sgid)) {
+ 				fprintf(stderr, "Badly formatted SGID.\n"); 
+-				return -1;
++				goto out;
+ 			}
+ 			break;
+ 		case 'D': 
+ 			if (!parse_gid(optarg, &query.dgid)) {
+ 				fprintf(stderr, "Badly formatted DGID.\n");
+-				return -1;
++				goto out;
+ 			}
+ 			break;
+ 		case '$':
+@@ -178,7 +178,7 @@ int main(int argc, char **argv)
+ 	print_path_record("Query Parameters", &query);
+ 	if ((query.pkey != 0) && (query.service_id != 0)) {
+                 fprintf(stderr, "Query using both Service ID and PKey not supported\n");
+-                return -1;
++                goto out;
+ 	}
+ 	/*
+  	 * Finds and opens the HFI.
+@@ -186,7 +186,7 @@ int main(int argc, char **argv)
+ 	hfi = op_path_find_hfi(hfi_name,&device);
+ 	if (!device || !hfi) {
+ 		fprintf(stderr, "Could not open device %s, error code %d\n", (hfi_name?hfi_name:"<null>"), errno);
+-		return -1;
++		goto out;
+ 	} else {
+ 		fprintf(stderr,"Using device %s\n",
+ 				device->name);
+@@ -201,7 +201,7 @@ int main(int argc, char **argv)
+ 		fprintf(stderr, "Could not access the Distributed SA. This may mean that\n"
+ 			"the ibacm/dsap has not been started, or that it has not been able\n"
+ 			"to contact the SA.\n");
+-		return -1;
++		goto out;
+ 	}
+ 
+ 	err = op_path_get_path_by_rec(context,
+@@ -222,5 +222,12 @@ int main(int argc, char **argv)
+ 	ibv_close_device(hfi);
+ 	op_path_close(context);
+ 
++	if (hfi_name)
++		free(hfi_name);
++
+ 	return 0;
++out:
++	if (hfi_name)
++		free(hfi_name);
++	return -1;
+ }
+-- 
+2.25.4
+

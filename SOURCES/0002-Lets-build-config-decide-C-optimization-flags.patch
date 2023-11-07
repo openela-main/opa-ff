@@ -1,0 +1,140 @@
+From f5628b82a017e619106f561e3ec69aa21940adec Mon Sep 17 00:00:00 2001
+From: Honggang Li <honli@redhat.com>
+Date: Tue, 11 Jun 2019 09:31:24 -0400
+Subject: [PATCH 2/3] Lets build config decide C optimization flags
+
+Signed-off-by: Honggang Li <honli@redhat.com>
+---
+ Dsap/Makefile                          | 4 ++--
+ IbaTools/stream/Makefile               | 2 +-
+ opasadb/path_tools/cache/Makefile      | 2 +-
+ opasadb/path_tools/dump/Makefile       | 2 +-
+ opasadb/path_tools/exercise/Makefile   | 2 +-
+ opasadb/path_tools/load/Makefile       | 2 +-
+ opasadb/path_tools/perf/Makefile       | 2 +-
+ opasadb/path_tools/query/Makefile      | 2 +-
+ opasadb/path_tools/query_many/Makefile | 2 +-
+ 9 files changed, 10 insertions(+), 10 deletions(-)
+
+diff --git a/Dsap/Makefile b/Dsap/Makefile
+index 77b976cbb074..0edd6e971c66 100644
+--- a/Dsap/Makefile
++++ b/Dsap/Makefile
+@@ -133,8 +133,8 @@ include $(TL_DIR)/$(PROJ_FILE_DIR)/Makerules.project
+ #					 (Windows Only)
+ #USEMFC	= How Windows MFC should be used (none, static, shared, no_mfc) [none]
+ #				(Windows Only)
+-COPT = # set by CKERNEL for drivers
+-CCOPT = # set by CKERNEL for drivers
++COPT ?= # set by CKERNEL for drivers
++CCOPT ?= # set by CKERNEL for drivers
+ #=============================================================================#
+ 
+ #=============================================================================#
+diff --git a/IbaTools/stream/Makefile b/IbaTools/stream/Makefile
+index fd963af19fdf..47f03fbbe236 100644
+--- a/IbaTools/stream/Makefile
++++ b/IbaTools/stream/Makefile
+@@ -125,7 +125,7 @@ include $(TL_DIR)/IbaTools/Makerules.module
+ #					 (Windows Only)
+ #USEMFC	= How Windows MFC should be used (none, static, shared, no_mfc) [none]
+ #				(Windows Only)
+-COPT = -O3
++COPT ?= -O3
+ #=============================================================================#
+ 
+ #=============================================================================#
+diff --git a/opasadb/path_tools/cache/Makefile b/opasadb/path_tools/cache/Makefile
+index 769bad731386..61b9ec9ba8e8 100644
+--- a/opasadb/path_tools/cache/Makefile
++++ b/opasadb/path_tools/cache/Makefile
+@@ -129,7 +129,7 @@ include $(TL_DIR)/IbaTools/Makerules.module
+ # C++ optimization flags, default lets build config decide
+ #CCOPT			=
+ # C optimization flags, default lets build config decide
+-COPT			= -g -D_GNU_SOURCE -Wall -fPIE
++COPT			?= -g -D_GNU_SOURCE -Wall -fPIE
+ #SUBSYSTEM = Subsystem to build for (none, console or windows) [none]
+ #					 (Windows Only)
+ #USEMFC	= How Windows MFC should be used (none, static, shared, no_mfc) [none]
+diff --git a/opasadb/path_tools/dump/Makefile b/opasadb/path_tools/dump/Makefile
+index 4562df3eee98..ecc91d76898a 100644
+--- a/opasadb/path_tools/dump/Makefile
++++ b/opasadb/path_tools/dump/Makefile
+@@ -129,7 +129,7 @@ include $(TL_DIR)/IbaTools/Makerules.module
+ # C++ optimization flags, default lets build config decide
+ #CCOPT			=
+ # C optimization flags, default lets build config decide
+-COPT			= -g -D_GNU_SOURCE -Wall -fPIE
++COPT			?= -g -D_GNU_SOURCE -Wall -fPIE
+ #SUBSYSTEM = Subsystem to build for (none, console or windows) [none]
+ #					 (Windows Only)
+ #USEMFC	= How Windows MFC should be used (none, static, shared, no_mfc) [none]
+diff --git a/opasadb/path_tools/exercise/Makefile b/opasadb/path_tools/exercise/Makefile
+index ebed0f5a651b..2f164eea0c45 100644
+--- a/opasadb/path_tools/exercise/Makefile
++++ b/opasadb/path_tools/exercise/Makefile
+@@ -129,7 +129,7 @@ include $(TL_DIR)/IbaTools/Makerules.module
+ # C++ optimization flags, default lets build config decide
+ #CCOPT			=
+ # C optimization flags, default lets build config decide
+-COPT			= -g -D_GNU_SOURCE -Wall -fPIE
++COPT			?= -g -D_GNU_SOURCE -Wall -fPIE
+ #SUBSYSTEM = Subsystem to build for (none, console or windows) [none]
+ #					 (Windows Only)
+ #USEMFC	= How Windows MFC should be used (none, static, shared, no_mfc) [none]
+diff --git a/opasadb/path_tools/load/Makefile b/opasadb/path_tools/load/Makefile
+index a30c8119477a..f1aa4579bfb0 100644
+--- a/opasadb/path_tools/load/Makefile
++++ b/opasadb/path_tools/load/Makefile
+@@ -128,7 +128,7 @@ include $(TL_DIR)/IbaTools/Makerules.module
+ # C++ optimization flags, default lets build config decide
+ #CCOPT			=
+ # C optimization flags, default lets build config decide
+-COPT			= -g -D_GNU_SOURCE -Wall -fPIE
++COPT			?= -g -D_GNU_SOURCE -Wall -fPIE
+ #SUBSYSTEM = Subsystem to build for (none, console or windows) [none]
+ #					 (Windows Only)
+ #USEMFC	= How Windows MFC should be used (none, static, shared, no_mfc) [none]
+diff --git a/opasadb/path_tools/perf/Makefile b/opasadb/path_tools/perf/Makefile
+index 5029c4a53917..b3e448cfb5ed 100644
+--- a/opasadb/path_tools/perf/Makefile
++++ b/opasadb/path_tools/perf/Makefile
+@@ -128,7 +128,7 @@ include $(TL_DIR)/IbaTools/Makerules.module
+ # C++ optimization flags, default lets build config decide
+ #CCOPT			=
+ # C optimization flags, default lets build config decide
+-COPT			= -g -D_GNU_SOURCE -Wall -fPIE
++COPT			?= -g -D_GNU_SOURCE -Wall -fPIE
+ #SUBSYSTEM = Subsystem to build for (none, console or windows) [none]
+ #					 (Windows Only)
+ #USEMFC	= How Windows MFC should be used (none, static, shared, no_mfc) [none]
+diff --git a/opasadb/path_tools/query/Makefile b/opasadb/path_tools/query/Makefile
+index 0b6e480f7e08..75fe5c48f35b 100644
+--- a/opasadb/path_tools/query/Makefile
++++ b/opasadb/path_tools/query/Makefile
+@@ -128,7 +128,7 @@ include $(TL_DIR)/IbaTools/Makerules.module
+ # C++ optimization flags, default lets build config decide
+ #CCOPT			=
+ # C optimization flags, default lets build config decide
+-COPT			= -g -D_GNU_SOURCE -Wall -fPIE
++COPT			?= -g -D_GNU_SOURCE -Wall -fPIE
+ #SUBSYSTEM = Subsystem to build for (none, console or windows) [none]
+ #					 (Windows Only)
+ #USEMFC	= How Windows MFC should be used (none, static, shared, no_mfc) [none]
+diff --git a/opasadb/path_tools/query_many/Makefile b/opasadb/path_tools/query_many/Makefile
+index c7b21d1cb579..796fb79a17b2 100644
+--- a/opasadb/path_tools/query_many/Makefile
++++ b/opasadb/path_tools/query_many/Makefile
+@@ -128,7 +128,7 @@ include $(TL_DIR)/IbaTools/Makerules.module
+ # C++ optimization flags, default lets build config decide
+ #CCOPT			=
+ # C optimization flags, default lets build config decide
+-COPT			= -g -D_GNU_SOURCE -Wall -fPIE
++COPT			?= -g -D_GNU_SOURCE -Wall -fPIE
+ #SUBSYSTEM = Subsystem to build for (none, console or windows) [none]
+ #					 (Windows Only)
+ #USEMFC	= How Windows MFC should be used (none, static, shared, no_mfc) [none]
+-- 
+2.25.4
+
