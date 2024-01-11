@@ -1,6 +1,6 @@
 Name:    opa-ff
 Epoch: 1
-Version: 10.11.1.3.1
+Version: 10.12.1.0.6
 Release: 1%{?dist}
 Summary: Intel Omni-Path basic tools and libraries for fabric management
 License: BSD or GPLv2
@@ -394,6 +394,10 @@ BUILDDIR=%{_builddir} DESTDIR=%{buildroot} LIBDIR=%{_libdir} DSAP_LIBDIR=%{_libd
 %{_includedir}/opamgt
 
 %changelog
+* Fri Jun 02 2023 Kamal Heib <kheib@redhat.com> - 1:10.12.1.0.6-1
+- Update to upstream release 10.12.1.0.6
+- Resolves: rhbz#2159647
+
 * Wed Aug 03 2022 Michal Schmidt <mschmidt@redhat.com> - 10.11.1.3.1-1
 - Update to upstream release 10.11.1.3.1
 - Resolves: rhbz#2049166
